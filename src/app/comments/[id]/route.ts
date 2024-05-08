@@ -5,5 +5,21 @@ export async function GET(
   { params }: {params: { id: string}}
 ) {
   const comment = comments.find( comment => comment.id === parseInt(params.id))
-  return Response.json(comment); 
+  if(comment){
+    return Response.json(comment);
+  }
+  return Response.json({"error": "No comment with that ID found"})
+}
+
+export async function PATCH(
+  request: Request,
+  { params }: { params: { id: string }}
+){
+  const body = await request.json()
+  const { text } = body
+  const index = comments.findIndex(
+    comment => comment.id == parseInt(params.id)
+  )
+  comments[index].text = text;
+  return Response.json(comments[index])
 }
